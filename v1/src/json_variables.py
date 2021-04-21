@@ -11,7 +11,9 @@ class Response():
     #                     }
 
     #                 }"""
-
+    
+    #{% verbatim %}
+    
     response_base = '{{ "description": "{response_description}","content": {{"application/json": {{ {response_elements} }} }} }}'                  
 
     # Response elements 
@@ -25,6 +27,8 @@ class Response():
 
     #element_string = '"{element_name}":{{"schema": {{"type": "string","value": "{response_value}" }} }}'
     element_string = '"{element_name}":{{"schema": {{"type": "string","value": {response_value} }} }}'
+    
+    #{% endverbatim %}
 
 
 # Class for REGEX
