@@ -125,37 +125,6 @@ def _resetearTokenFlag(_ID):
 
 
 """
-
-### TO-DO: Verify whether the LinkId has to be stored or not in the users session dictionary.
-
-#
-def _setTemporaryLinkID(_ID, _linkID):
-    try:
-        user = user_sessions.get(_ID)
-
-        assert(user != None)
-        user.update({'linkID': _linkID})
-        return True
-
-    except:
-        return False
-
-#
-def _getTemporaryLinkID(_ID):
-    try:
-        pass
-    except:
-        pass
-
-#
-def _deleteTemporaryLinkID(_ID, _linkID):
-    try:
-        pass
-    except:
-        pass """
-
-
-"""
 JsonConstructor
 """
 def JsonConstructor(_UUID='', _address='', _msToken='', _bindingMethod='', _identities='', _ERROR=JsonVariables.Error.NO_ERROR):
