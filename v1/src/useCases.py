@@ -894,8 +894,6 @@ def api_identityAllList(request):
 
         json_identities = json.dumps(identities)
 
-        print(JsonConstructor(_identities=json_identities))
-
         return JsonResponse(JsonConstructor(_identities=json_identities), status=200)
 
 
