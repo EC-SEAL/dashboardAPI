@@ -1535,6 +1535,103 @@ def uc2_05(request):
 
 
 """
+    UC3.01
+"""
+def uc3_01(request):
+
+    def eMRTDprocess(_UUID, _moduleID, _dataset):
+        error_text = 'An error has been occured with the API Calls. Please, contact the System Administrador (Error_code: ISL)'
+
+        try:
+            assert(sessionExists(_UUID))
+            assert(sessionValid(_UUID))
+        except:
+            if (Settings.DEBUG): print('DEBUG-uc3_01-ISL-001: Error assert session exists or valid')
+            return error_text, 401
+
+
+        cl_session = sessionControl(_UUID)
+        cl_ident = Cl_ident()
+
+        if (Settings.DEBUG): print('DEBUG-uc3_01-ISL-002: sessionId: ', cl_session.sessionID)
+
+        # id_list = cl_ident.mgrList(cl_session.sessionID)
+        # try:
+        #     assert(isinstance(id_list, requests.Response) and id_list.status_code == 200)
+
+        #     id_list = id_list.json()                       
+
+        #     for index in range(0,len(id_list)):
+        #         result_data = json.loads(id_list[index].get('data'))
+        #         id_list[index].update({'data': result_data})
+
+        #     # filter(lambda person: person['name'] == 'Pam', people)
+        #     identityA = list(filter(lambda identity: identity['data']['id'] == _datasetId_A, id_list))
+        #     identityB = list(filter(lambda identity: identity['data']['id'] == _datasetId_B, id_list))
+
+        #     assert(len(identityA) > 0 and len(identityB) > 0)
+
+        # except:
+        #     if (Settings.DEBUG): print('DEBUG-uc7_01-MGR-004: Error parsing identities ID json response')
+        #     return error_text, 404
+
+        signed_dataset = DatasetConstructor(_dataset)
+
+        # ISL
+        response = cl_ident.sourceLoad(cl_session.sessionID, _moduleID, signed_dataset)
+        
+        try:
+            response_sessionToken = response.json().get('payload')
+            assert(len(response_sessionToken) > len(cl_session.sessionID))
+
+            response_address = response.json().get('access').get('address')
+            assert(len(response_address)>0 and response_address[:4] == 'http')
+
+            # It would be useful if the linkID had to be stored
+            #response_bodyContent = json.loads(response.json().get('bodyContent'))
+            #assert(len(response_bodyContent.get('id')) == len('LINK_' + cl_session.sessionID))
+
+            # _setTemporaryLinkID(_ID, _linkID):
+
+        except:
+            if (Settings.DEBUG): print('DEBUG-uc7_01-IRE-005: Error parsing linkingRequest json response')
+            return error_text, 404
+
+
+        return '{}&{}'.format(response_address,response_sessionToken), 200
+
+
+    try:
+        parametro_http_moduleID = request.GET['moduleID']
+        parametro_http_UUID = request.GET['data']
+
+        parametro_http_datasetId_A = request.POST['datasetIDa']
+        parametro_http_datasetId_B = request.POST['datasetIDb']
+
+        # Uncomment if necessary
+        # if (Settings.DEBUG):
+        #     print('DEBUG-uc3_02-001: moduleID: ', parametro_http_moduleID)
+        #     print('DEBUG-uc3_02-002: UUID: ', parametro_http_UUID)
+        #     print('DEBUG-uc3_02-003: GET param: ', request.GET)
+        #     print('DEBUG-uc3_02-004: POST param: ', request.POST) 
+
+    except:
+        return HttpResponse('ModuleID or data not found in the request', status=404)
+
+
+    if ((parametro_http_moduleID == 'autoSEAL' or parametro_http_moduleID == 'manualXYZ') and (len(parametro_http_UUID) == 32)):
+        response_text, status_code = identityReconciliation(parametro_http_UUID, parametro_http_moduleID, parametro_http_datasetId_A, parametro_http_datasetId_B)
+        return HttpResponse(response_text, status=status_code)
+    else:
+        if (Settings.DEBUG): print('ERROR-uc7_01-006: Error invalid moduleId = {} or UUID = {}'.format(parametro_http_moduleID,parametro_http_UUID))
+        return HttpResponse('ModuleID or data invalid', status=404)
+
+####################################################################################
+
+
+
+
+"""
     UC3.02
 """
 def uc3_02(request):

@@ -160,6 +160,13 @@ def JsonConstructor(_UUID='', _address='', _msToken='', _bindingMethod='', _iden
         return json.loads(response)
       
 
+"""
+DatasetConstructor
+"""
+def DatasetConstructor(_dataset):
+    pass
+
+    return None
 
 
 """

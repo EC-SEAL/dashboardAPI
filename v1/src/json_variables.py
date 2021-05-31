@@ -1,5 +1,99 @@
 """ Json Variables """
 
+class Dataset():
+
+    dataset = {"id": "{sessionId}", "attributes": [{"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentCode",
+        "friendlyName"	:"DocumentCode", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "P"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#IssuingState",
+        "friendlyName"	:"IssuingState", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "ESP"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentNumber",
+        "friendlyName"	:"DocumentNumber", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "PAG001234"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfExpiry",
+        "friendlyName"	:"DateOfExpiry", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "330126"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#GivenName",
+        "friendlyName"	:"GivenName", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: ["Juan", "Carlos"]
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Surname",
+        "friendlyName"	:"Surname", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: ["Rodriguez", "Grande"]
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Nationality",
+        "friendlyName"	:"Nationality", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "Española"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfBirth",
+        "friendlyName"	:"DateOfBirth", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "710531"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Sex",
+        "friendlyName"	:"Sex", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "M"
+
+    },
+	{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#PlaceOfBirth",
+        "friendlyName"	:"PlaceOfBirth", 
+        "encoding"		: "UTF-8", 
+        "isMandatory"	: "true",
+        "values"		: "Malaga"
+
+    },
+		{
+		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
+        "friendlyName"	:"FaceImage", 
+        "encoding"		: "Binary", 
+        "isMandatory"	: "true"
+    }	
+  ]}
+
+    signed_dataset = {}
+
+
+
+
 class Response():
 
     # Response Base

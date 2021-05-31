@@ -258,6 +258,31 @@ class Cl_ident:
 
         return r
 
+    def sourceLoad(self, _sessionId, _moduleId, _dataset):
+
+        if (Settings.DEBUG):
+            print('Cl_ident sourceLoad INI')
+
+        s = requests.Session()
+
+        headers = {'Accept': 'application/json'}
+
+        try:
+            r = s.post(
+                Settings.Prod.API_POST_cl_ident_source_module_load.format(
+                    sessionId=_sessionId,
+                    moduleId=_moduleId),
+                data=_dataset,
+                headers=headers,
+                proxies=Settings.Prod.SEAL_PROXY)
+        except BaseException:
+            if (Settings.DEBUG):
+                print('Cl_ident sourceLoad exception')
+            r = requests.Response()
+
+        return r        
+        
+
     def mgrList(self, _sessionId):
 
         if (Settings.DEBUG):
