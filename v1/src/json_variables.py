@@ -6,7 +6,7 @@ class Dataset():
         "friendlyName"	:"DocumentCode", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "P"
+        "values"		: "{DocumentCode_value}"
 
     },
 	{
@@ -14,7 +14,7 @@ class Dataset():
         "friendlyName"	:"IssuingState", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "ESP"
+        "values"		: "{IssuingState_value}"
 
     },
 	{
@@ -22,7 +22,7 @@ class Dataset():
         "friendlyName"	:"DocumentNumber", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "PAG001234"
+        "values"		: "{DocumentNumber_value}"
 
     },
 	{
@@ -30,7 +30,7 @@ class Dataset():
         "friendlyName"	:"DateOfExpiry", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "330126"
+        "values"		: "{DateOfExpiry_value}"
 
     },
 	{
@@ -38,7 +38,7 @@ class Dataset():
         "friendlyName"	:"GivenName", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: ["Juan", "Carlos"]
+        "values"		: ["{GivenName_value}"]
 
     },
 	{
@@ -46,7 +46,7 @@ class Dataset():
         "friendlyName"	:"Surname", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: ["Rodriguez", "Grande"]
+        "values"		: ["{Surname_value}"]
 
     },
 	{
@@ -54,7 +54,7 @@ class Dataset():
         "friendlyName"	:"Nationality", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "Española"
+        "values"		: "{Nationality_value}"
 
     },
 	{
@@ -62,7 +62,7 @@ class Dataset():
         "friendlyName"	:"DateOfBirth", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "710531"
+        "values"		: "{DateOfBirth_value}"
 
     },
 	{
@@ -70,7 +70,7 @@ class Dataset():
         "friendlyName"	:"Sex", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "M"
+        "values"		: "{Sex_value}"
 
     },
 	{
@@ -78,18 +78,19 @@ class Dataset():
         "friendlyName"	:"PlaceOfBirth", 
         "encoding"		: "UTF-8", 
         "isMandatory"	: "true",
-        "values"		: "Malaga"
+        "values"		: "{PlaceOfBirth_value}"
 
     },
 		{
 		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
         "friendlyName"	:"FaceImage", 
         "encoding"		: "Binary", 
-        "isMandatory"	: "true"
+        "isMandatory"	: "true",
+        "values"		: None
     }	
   ]}
 
-    signed_dataset = {}
+    signed_dataset = {"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}
 
 
 

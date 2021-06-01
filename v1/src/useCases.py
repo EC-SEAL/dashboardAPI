@@ -1575,7 +1575,7 @@ def uc3_01(request):
         #     if (Settings.DEBUG): print('DEBUG-uc7_01-MGR-004: Error parsing identities ID json response')
         #     return error_text, 404
 
-        signed_dataset = DatasetConstructor(_dataset)
+        signed_dataset = DatasetSerialisedConstructor(_dataset)
 
         # ISL
         response = cl_ident.sourceLoad(cl_session.sessionID, _moduleID, signed_dataset)
