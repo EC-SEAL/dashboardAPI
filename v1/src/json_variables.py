@@ -3,8 +3,8 @@
 class Dataset():
 
     dataset = {"id": "{sessionId}", "attributes": [{"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentCode",
-        "friendlyName"	:"DocumentCode", 
-        "encoding"		: "UTF-8", 
+        "friendlyName"	:"DocumentCode",
+        "encoding"		: "UTF-8",
         "isMandatory"	: "true",
         "values"		: "{DocumentCode_value}"
 

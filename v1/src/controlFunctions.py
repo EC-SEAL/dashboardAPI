@@ -164,7 +164,11 @@ def JsonConstructor(_UUID='', _address='', _msToken='', _bindingMethod='', _iden
     DatasetSerialisedConstructor
 """
 def DatasetSerialisedConstructor(_dataset):
-    pass
+    
+    dict_dataset = json.loads(_dataset)
+
+    #datasetTemplate = JsonVariables.Dataset.dataset.format(DocumentCode_value=dict_dataset[DocumentCode'],IssuingState_value=dict_dataset['IssuingState'])
+
 
     return None
 
