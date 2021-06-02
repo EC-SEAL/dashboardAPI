@@ -938,7 +938,7 @@ def api_identityAllList(request):
 """ EMRTD """
 def api_eMRTD(request, moduleID):
 
-    API_DS_STORE_DEBUG_CODE = "api_EMRTD - "
+    API_EMRTD_DEBUG_CODE = "api_EMRTD - "
     
     try:
         if request.method != 'POST':
@@ -975,7 +975,7 @@ def api_eMRTD(request, moduleID):
 
         signed_dataset = DatasetSerialisedConstructor(cl_session.sessionID, _dataset)
 
-        r_ident = cl_ident.sourceLoad(cl_session.sessionID, _moduleID, signed_dataset)
+        r_ident = cl_ident.sourceLoad(cl_session.sessionID, moduleID, signed_dataset)
 
         if r_ident.status_code != REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
@@ -996,70 +996,70 @@ def api_eMRTD(request, moduleID):
         return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
 
     except JsonVariables.Exceptions.MethodNotValid:
-            print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_METHOD_MUST_BE_POST)
+            print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_METHOD_MUST_BE_POST)
             return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_METHOD_MUST_BE_POST), status=405)
 
 
     except JsonVariables.Exceptions.RequestNeedsUUID:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID), status=400)
 
     
     except JsonVariables.Exceptions.RequestNeedsDataSet:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_DATASET)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_DATASET)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_DATASET), status=400)
 
 
     except JsonVariables.Exceptions.ErrorInvalidLengthSessionId:
         # Tracing details error only on the server 
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_INVALID_LENGTH_SESSIONID)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_INVALID_LENGTH_SESSIONID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_EMRTD_FAILED), status=502)
 
     except JsonVariables.Exceptions.RequestWithInvalidUUID:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID), status=400)
 
 
     except JsonVariables.Exceptions.RequestWithOutdatedUUID:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID), status=401)
 
 
     except JsonVariables.Exceptions.RequestNeedsModuleID:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID), status=400)
 
 
     except JsonVariables.Exceptions.RequestWithInvalidModuleID:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID), status=400)
 
     except JsonVariables.Exceptions.IdentResponseFailed:
         # Tracing details error only on the server 
-        print(API_DERIVE_ID_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)    
 
 
     except JsonVariables.Exceptions.ErrorTokenDoesntFitRegex:
         # Tracing details error only on the server 
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_TOKEN_DOESNT_FIT_REGEX)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_TOKEN_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_EMRTD_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.ErrorAddressDoesntFitRegex:
         # Tracing details error only on the server 
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_ADDRESS_DOESNT_FIT_REGEX)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_ADDRESS_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_EMRTD_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.ErrorBindingDoesntFitList:
         # Tracing details error only on the server 
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_BINDING_DOESNT_FIT_LIST)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_BINDING_DOESNT_FIT_LIST)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_EMRTD_FAILED), status=502)
 
     except:
-        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=500)
+        print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_ID_EMRTD_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_EMRTD_FAILED), status=500)
 
 
 """VC Issue"""

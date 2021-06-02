@@ -172,7 +172,7 @@ def DatasetSerialisedConstructor(_sessionId, _dataset):
                                                            IssuingState_value=dict_dataset['IssuingState'],
                                                            DocumentNumber_value=dict_dataset['DocumentNumber'], 
                                                            DateOfExpiry_value=dict_dataset['DateOfExpiry'], 
-                                                           GivenName_value=dict_dataset['GivenName']),
+                                                           GivenName_value=dict_dataset['GivenName'],
                                                            Surname_value=dict_dataset['Surname'],
                                                            Nationality_value=dict_dataset['Nationality'],
                                                            DateOfBirth_value=dict_dataset['DateOfBirth'],
