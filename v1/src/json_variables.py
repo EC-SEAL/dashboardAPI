@@ -2,97 +2,102 @@
 
 class Dataset():
 
-    dataset = {"id": "{sessionId}", "attributes": [{"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentCode",
-        "friendlyName"	:"DocumentCode",
-        "encoding"		: "UTF-8",
-        "isMandatory"	: "true",
-        "values"		: "{DocumentCode_value}"
+    #{% verbatim %}
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#IssuingState",
-        "friendlyName"	:"IssuingState", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{IssuingState_value}"
+    dataset = '''{{
+                    "id": "{sessionId}", "attributes": [
+                        {{  "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentCode",
+                            "friendlyName"	:"DocumentCode",
+                            "encoding"		: "UTF-8",
+                            "mandatory"	    : "true",
+                            "values"		: "{DocumentCode_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentNumber",
-        "friendlyName"	:"DocumentNumber", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{DocumentNumber_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#IssuingState",
+                            "friendlyName"	:"IssuingState", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{IssuingState_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfExpiry",
-        "friendlyName"	:"DateOfExpiry", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{DateOfExpiry_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentNumber",
+                            "friendlyName"	:"DocumentNumber", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{DocumentNumber_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#GivenName",
-        "friendlyName"	:"GivenName", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: ["{GivenName_value}"]
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfExpiry",
+                            "friendlyName"	:"DateOfExpiry", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{DateOfExpiry_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Surname",
-        "friendlyName"	:"Surname", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: ["{Surname_value}"]
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#GivenName",
+                            "friendlyName"	:"GivenName", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: ["{GivenName_value}"]
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Nationality",
-        "friendlyName"	:"Nationality", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{Nationality_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Surname",
+                            "friendlyName"	:"Surname", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: ["{Surname_value}"]
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfBirth",
-        "friendlyName"	:"DateOfBirth", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{DateOfBirth_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Nationality",
+                            "friendlyName"	:"Nationality", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{Nationality_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Sex",
-        "friendlyName"	:"Sex", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{Sex_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DateOfBirth",
+                            "friendlyName"	:"DateOfBirth", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{DateOfBirth_value}"
 
-    },
-	{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#PlaceOfBirth",
-        "friendlyName"	:"PlaceOfBirth", 
-        "encoding"		: "UTF-8", 
-        "isMandatory"	: "true",
-        "values"		: "{PlaceOfBirth_value}"
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#Sex",
+                            "friendlyName"	:"Sex", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{Sex_value}"
 
-    },
-		{
-		"name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
-        "friendlyName"	:"FaceImage", 
-        "encoding"		: "Binary", 
-        "isMandatory"	: "true",
-        "values"		: None
-    }	
-  ]}
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#PlaceOfBirth",
+                            "friendlyName"	:"PlaceOfBirth", 
+                            "encoding"		: "UTF-8", 
+                            "mandatory"	    : "true",
+                            "values"		: "{PlaceOfBirth_value}"
 
-    signed_dataset = {"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}
+                        }},
+                        {{
+                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
+                            "friendlyName"	:"FaceImage", 
+                            "encoding"		: "Binary", 
+                            "mandatory"	    : "true",
+                            "values"		: None
+                        }}
+                    ]
+                }}'''
 
+    signed_dataset = '{{"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}}'
 
+    #{% endverbatim %}
 
 
 class Response():
@@ -162,6 +167,8 @@ class Error():
     ERROR_REQUEST_WITH_INVALID_UUID = 'The UUID received is invalid'
     ERROR_REQUEST_WITH_OUTDATED_UUID = 'The UUID received is outdated'
 
+    ERROR_REQUEST_WITHOUT_DATASET = 'The request needs to be sent together with an Identity DataSet'
+
     ERROR_REQUEST_WITHOUT_MODULEID = 'The request needs to be sent together with a moduleID'
     ERROR_REQUEST_WITH_INVALID_MODULEID =  'The moduleID received is invalid'
 
@@ -216,6 +223,9 @@ class Exceptions():
         # Class exception for handling requests without mandatory UUID
         pass
 
+    class RequestNeedsDataSet(Exception):
+        # Class exception for handling requests without mandatory DataSet
+        pass
 
     class RequestWithInvalidUUID(Exception):
         # Class exception for handling requests with invalid UUID

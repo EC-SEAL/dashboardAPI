@@ -163,14 +163,39 @@ def JsonConstructor(_UUID='', _address='', _msToken='', _bindingMethod='', _iden
 """
     DatasetSerialisedConstructor
 """
-def DatasetSerialisedConstructor(_dataset):
+def DatasetSerialisedConstructor(_sessionId, _dataset):
     
     dict_dataset = json.loads(_dataset)
 
-    #datasetTemplate = JsonVariables.Dataset.dataset.format(DocumentCode_value=dict_dataset[DocumentCode'],IssuingState_value=dict_dataset['IssuingState'])
+    datasetTemplate = JsonVariables.Dataset.dataset.format(sessionId=_sessionId,
+                                                           DocumentCode_value=dict_dataset['DocumentCode'], 
+                                                           IssuingState_value=dict_dataset['IssuingState'],
+                                                           DocumentNumber_value=dict_dataset['DocumentNumber'], 
+                                                           DateOfExpiry_value=dict_dataset['DateOfExpiry'], 
+                                                           GivenName_value=dict_dataset['GivenName']),
+                                                           Surname_value=dict_dataset['Surname'],
+                                                           Nationality_value=dict_dataset['Nationality'],
+                                                           DateOfBirth_value=dict_dataset['DateOfBirth'],
+                                                           Sex_value=dict_dataset['Sex'],
+                                                           PlaceOfBirth_value=dict_dataset['PlaceOfBirth'])
+    
+    datasetTemplate_b64 = base64.b64encode(datasetTemplate)
 
+    import hmac
+    import hashlib
 
-    return None
+    secret_key = "12345678"
+    total_params = datasetTemplate_b64
+
+    datasetTemplate_b64_sign =  hmac.new(secret_key, total_params, hashlib.sha256).hexdigest()
+
+    datasetSerilizedTemplate = JsonVariables.Dataset.signed_dataset.format(datasetSerialised_value=datasetTemplate_b64,
+                                                                           signature_value=datasetTemplate_b64_sign)
+
+    print("dataset serializado:")
+    print(datasetSerilizedTemplate)
+
+    return datasetSerilizedTemplate
 
 
 """

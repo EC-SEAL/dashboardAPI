@@ -30,6 +30,8 @@ VC_ISSUE_MODULE_VALID_METHODS = ['eIDAS', 'eduGAIN', 'eMRTD', 'eIDAS-eduGAIN']
 
 VC_ISSUE_SSI_ID_VALID_METHODS = 'uPort'
 
+EMRTD_VALID_METHODS = ['eMRTD']
+
 
 """API TEST (Get)"""
 def api_test(request):
@@ -933,7 +935,131 @@ def api_identityAllList(request):
         print(API_ID_ALL_LIST_DEBUG_CODE + JsonVariables.Error.ERROR_ID_ALL_LIST_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_ALL_LIST_FAILED), status=500)
 
+""" EMRTD """
+def api_eMRTD(request, moduleID):
 
+    API_DS_STORE_DEBUG_CODE = "api_EMRTD - "
+    
+    try:
+        if request.method != 'POST':
+            raise JsonVariables.Exceptions.MethodNotValid
+
+        if request.POST.get('UUID',None) == None:
+            raise JsonVariables.Exceptions.RequestNeedsUUID
+            
+        UUID = request.POST['UUID']
+
+        if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
+            raise JsonVariables.Exceptions.RequestWithInvalidUUID
+
+        if not sessionValid(UUID):
+            raise JsonVariables.Exceptions.RequestWithOutdatedUUID
+
+        if moduleID == None:
+            raise JsonVariables.Exceptions.RequestNeedsModuleID
+
+        if moduleID not in EMRTD_VALID_METHODS:
+            raise JsonVariables.Exceptions.RequestWithInvalidModuleID
+
+        cl_session = sessionControl(UUID)
+
+        if len(cl_session.sessionID) != LENGTH_SESSIONID:
+            raise JsonVariables.Exceptions.ErrorInvalidLengthSessionId
+
+        if request.POST.get('param_json',None) == None:
+            raise JsonVariables.Exceptions.RequestNeedsDataSet
+
+        _dataset = request.POST['param_json']
+
+        cl_ident = Cl_ident()
+
+        signed_dataset = DatasetSerialisedConstructor(cl_session.sessionID, _dataset)
+
+        r_ident = cl_ident.sourceLoad(cl_session.sessionID, _moduleID, signed_dataset)
+
+        if r_ident.status_code != REQUEST_RESPONSE_200_OK:
+            raise JsonVariables.Exceptions.IdentResponseFailed
+
+        response_address = r_ident.json().get('access').get('address')
+        response_sessionToken = r_ident.json().get('payload')        
+        response_bindingMethod = r_ident.json().get('access').get('binding')
+
+        if not re.compile(JsonVariables.Regex.REGEX_ADDRESS).match(response_address):
+            raise JsonVariables.Exceptions.ErrorAddressDoesntFitRegex
+
+        if not re.compile(JsonVariables.Regex.REGEX_MSTOKEN).match(response_sessionToken):
+            raise JsonVariables.Exceptions.ErrorTokenDoesntFitRegex
+
+        if response_bindingMethod not in ['HTTP-POST-REDIRECT','HTTP-GET-REDIRECT']:
+            raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
+
+        return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
+
+    except JsonVariables.Exceptions.MethodNotValid:
+            print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_METHOD_MUST_BE_POST)
+            return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_METHOD_MUST_BE_POST), status=405)
+
+
+    except JsonVariables.Exceptions.RequestNeedsUUID:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID), status=400)
+
+    
+    except JsonVariables.Exceptions.RequestNeedsDataSet:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_DATASET)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_DATASET), status=400)
+
+
+    except JsonVariables.Exceptions.ErrorInvalidLengthSessionId:
+        # Tracing details error only on the server 
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_INVALID_LENGTH_SESSIONID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+
+    except JsonVariables.Exceptions.RequestWithInvalidUUID:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID), status=400)
+
+
+    except JsonVariables.Exceptions.RequestWithOutdatedUUID:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID), status=401)
+
+
+    except JsonVariables.Exceptions.RequestNeedsModuleID:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID), status=400)
+
+
+    except JsonVariables.Exceptions.RequestWithInvalidModuleID:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID), status=400)
+
+    except JsonVariables.Exceptions.IdentResponseFailed:
+        # Tracing details error only on the server 
+        print(API_DERIVE_ID_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)    
+
+
+    except JsonVariables.Exceptions.ErrorTokenDoesntFitRegex:
+        # Tracing details error only on the server 
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_TOKEN_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.ErrorAddressDoesntFitRegex:
+        # Tracing details error only on the server 
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_ADDRESS_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.ErrorBindingDoesntFitList:
+        # Tracing details error only on the server 
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_BINDING_DOESNT_FIT_LIST)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=502)
+
+    except:
+        print(API_DS_STORE_DEBUG_CODE + JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_PERSISTENCE_STORE_FAILED), status=500)
 
 
 """VC Issue"""
