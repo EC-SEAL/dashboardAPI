@@ -8,6 +8,10 @@ import uuid
 import jwt
 import json
 import redis
+import base64
+import hmac
+import hashlib
+
 
 # Dictionary with the access_token or ID, and timestamp value for every
 # user's session in the system
@@ -179,12 +183,9 @@ def DatasetSerialisedConstructor(_sessionId, _dataset):
                                                            Sex_value=dict_dataset['Sex'],
                                                            PlaceOfBirth_value=dict_dataset['PlaceOfBirth'])
     
-    datasetTemplate_b64 = base64.b64encode(datasetTemplate)
+    datasetTemplate_b64 = base64.b64encode(datasetTemplate.encode('utf-8'))
 
-    import hmac
-    import hashlib
-
-    secret_key = "12345678"
+    secret_key = b"12345678"
     total_params = datasetTemplate_b64
 
     datasetTemplate_b64_sign =  hmac.new(secret_key, total_params, hashlib.sha256).hexdigest()
