@@ -167,11 +167,14 @@ def JsonConstructor(_UUID='', _address='', _msToken='', _bindingMethod='', _iden
 """
     DatasetSerialisedConstructor
 """
-def DatasetSerialisedConstructor(_sessionId, _dataset):
+def DatasetSerialisedConstructor(_id, _dataset):
     
     dict_dataset = json.loads(_dataset)
 
-    datasetTemplate = JsonVariables.Dataset.dataset.format(sessionId=_sessionId,
+    print('***** dict_dataset:')
+    print(dict_dataset)
+
+    datasetTemplate = JsonVariables.Dataset.dataset.format(id=_id,
                                                            DocumentCode_value=dict_dataset['DocumentCode'], 
                                                            IssuingState_value=dict_dataset['IssuingState'],
                                                            DocumentNumber_value=dict_dataset['DocumentNumber'], 
@@ -183,18 +186,22 @@ def DatasetSerialisedConstructor(_sessionId, _dataset):
                                                            Sex_value=dict_dataset['Sex'],
                                                            PlaceOfBirth_value=dict_dataset['PlaceOfBirth'])
     
+    print('***** datasetTemplate:')
+    print(datasetTemplate)
+
     datasetTemplate_b64 = base64.b64encode(datasetTemplate.encode('utf-8'))
 
     secret_key = b"12345678"
+    #total_params = datasetTemplate_b64.decode('utf-8')
     total_params = datasetTemplate_b64
-
+    
     datasetTemplate_b64_sign =  hmac.new(secret_key, total_params, hashlib.sha256).hexdigest()
 
-    datasetSerilizedTemplate = JsonVariables.Dataset.signed_dataset.format(datasetSerialised_value=datasetTemplate_b64,
+    datasetSerilizedTemplate = JsonVariables.Dataset.signed_dataset.format(datasetSerialised_value=datasetTemplate_b64.decode('utf-8'),
                                                                            signature_value=datasetTemplate_b64_sign)
 
-    print("dataset serializado:")
-    print(datasetSerilizedTemplate)
+    # print("dataset serializado:")
+    # print(datasetSerilizedTemplate)
 
     return datasetSerilizedTemplate
 

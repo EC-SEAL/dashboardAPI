@@ -7,6 +7,8 @@ from .env import api_settings as Settings
 import json
 import re
 
+import uuid
+
 
 LENGTH_SESSIONID = 36   # 32 + 4 (hyphens)
 LENGTH_UUID = 32
@@ -973,9 +975,9 @@ def api_eMRTD(request, moduleID):
 
         cl_ident = Cl_ident()
 
-        signed_dataset = DatasetSerialisedConstructor(cl_session.sessionID, _dataset)
+        signed_dataset = DatasetSerialisedConstructor(uuid.uuid4(), _dataset)
 
-        r_ident = cl_ident.sourceLoad(cl_session.sessionID, moduleID, signed_dataset)
+        r_ident = cl_ident.sourceLoad(cl_session.sessionID, moduleID, signed_dataset)  
 
         if r_ident.status_code != REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
@@ -993,7 +995,24 @@ def api_eMRTD(request, moduleID):
         if response_bindingMethod not in ['HTTP-POST-REDIRECT','HTTP-GET-REDIRECT']:
             raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
 
-        return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
+        generic_api = Generic()
+
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        payload = {'msToken': response_sessionToken}
+
+        r_isload = generic_api.post(headers,response_address,payload)
+
+        print('***** r_isload: ')
+        print(r_isload)
+
+        print('***** r_isload.content: ')
+        print(r_isload.content)
+
+        # TO-DO: Create a new error
+        if r_isload.status_code != REQUEST_RESPONSE_200_OK:
+            raise Exception
+
+        return JsonResponse(JsonConstructor(), status=200)
 
     except JsonVariables.Exceptions.MethodNotValid:
             print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_METHOD_MUST_BE_POST)
@@ -1037,7 +1056,7 @@ def api_eMRTD(request, moduleID):
     except JsonVariables.Exceptions.IdentResponseFailed:
         # Tracing details error only on the server 
         print(API_EMRTD_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)    
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED), status=502)    
 
 
     except JsonVariables.Exceptions.ErrorTokenDoesntFitRegex:

@@ -5,12 +5,12 @@ class Dataset():
     #{% verbatim %}
 
     dataset = '''{{
-                    "id": "{sessionId}", "attributes": [
+                    "id": "{id}", "attributes": [
                         {{  "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#DocumentCode",
                             "friendlyName"	:"DocumentCode",
                             "encoding"		: "UTF-8",
                             "mandatory"	    : "true",
-                            "values"		: "{DocumentCode_value}"
+                            "values"		: ["{DocumentCode_value}"]
 
                         }},
                         {{
@@ -18,7 +18,7 @@ class Dataset():
                             "friendlyName"	:"IssuingState", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{IssuingState_value}"
+                            "values"		: ["{IssuingState_value}"]
 
                         }},
                         {{
@@ -26,7 +26,7 @@ class Dataset():
                             "friendlyName"	:"DocumentNumber", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{DocumentNumber_value}"
+                            "values"		: ["{DocumentNumber_value}"]
 
                         }},
                         {{
@@ -34,7 +34,7 @@ class Dataset():
                             "friendlyName"	:"DateOfExpiry", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{DateOfExpiry_value}"
+                            "values"		: ["{DateOfExpiry_value}"]
 
                         }},
                         {{
@@ -58,7 +58,7 @@ class Dataset():
                             "friendlyName"	:"Nationality", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{Nationality_value}"
+                            "values"		: ["{Nationality_value}"]
 
                         }},
                         {{
@@ -66,7 +66,7 @@ class Dataset():
                             "friendlyName"	:"DateOfBirth", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{DateOfBirth_value}"
+                            "values"		: ["{DateOfBirth_value}"]
 
                         }},
                         {{
@@ -74,7 +74,7 @@ class Dataset():
                             "friendlyName"	:"Sex", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{Sex_value}"
+                            "values"		: ["{Sex_value}"]
 
                         }},
                         {{
@@ -82,7 +82,7 @@ class Dataset():
                             "friendlyName"	:"PlaceOfBirth", 
                             "encoding"		: "UTF-8", 
                             "mandatory"	    : "true",
-                            "values"		: "{PlaceOfBirth_value}"
+                            "values"		: ["{PlaceOfBirth_value}"]
 
                         }},
                         {{
@@ -90,9 +90,11 @@ class Dataset():
                             "friendlyName"	:"FaceImage", 
                             "encoding"		: "Binary", 
                             "mandatory"	    : "true",
-                            "values"		: None
+                            "values"		: null
                         }}
-                    ]
+                    ],
+                    "subjectId": "DocumentNumber",
+                    "issuerId": "IssuingState"
                 }}'''
 
     signed_dataset = '{{"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}}'

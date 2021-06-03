@@ -214,6 +214,18 @@ class Cl_ident:
                             "datasetA": datasetA,
                             "datasetB": datasetB})
 
+                elif data[identity]['data'].get('type') == 'dataSet':
+
+                    identities_list.append(
+                        {
+                            "id": data[identity]['data'].get('id'),
+                            "provider": data[identity]['data'].get('type'),
+                            "loa": data[identity]['data'].get('loa'),
+                            "issued": data[identity]['data'].get('issued'),
+                            "expiration": data[identity]['data'].get('expiration'),
+                            "attributes": data[identity]['data'].get('attributes')})
+
+
             providers_list = list(identity.get('provider')
                                   for identity in identities_list)
             #['eIDAS', 'eduGAIN', 'eduGAIN', 'eduGAIN']
@@ -265,7 +277,7 @@ class Cl_ident:
 
         s = requests.Session()
 
-        headers = {'Accept': 'application/json'}
+        headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
 
         try:
             r = s.post(
@@ -686,3 +698,32 @@ class Cl_vcissuing:
             r = requests.Response()
 
         return r
+
+
+"""
+Class for generic http requests:
+"""
+class Generic:
+
+    def post(self, _headers, _url, _payload):
+
+        if (Settings.DEBUG):
+            print('Generic post INI')
+
+        s = requests.Session()
+
+        headers = _headers
+
+        try:
+            r = s.post(_url,
+                data=_payload,
+                headers=headers,
+                proxies=Settings.Prod.SEAL_PROXY)
+        except BaseException:
+            if (Settings.DEBUG):
+                print('Generic post exception')
+            r = requests.Response()
+
+        return r     
+
+
