@@ -894,7 +894,13 @@ def api_identityAllList(request):
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
 
+        print('***** api_identityAllList antes jsonParser')
+        print('***** r_ident: ')
+        print(r_ident.content)
+
         identities = cl_ident.jsonParser(r_ident)
+
+        print('***** api_identityAllList despues jsonParser')
 
         json_identities = json.dumps(identities)
 

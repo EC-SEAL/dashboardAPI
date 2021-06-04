@@ -175,6 +175,7 @@ def DatasetSerialisedConstructor(_id, _dataset):
     print(dict_dataset)
 
     datasetTemplate = JsonVariables.Dataset.dataset.format(id=_id,
+                                                           issued=datetime.datetime.now().isoformat(),
                                                            DocumentCode_value=dict_dataset['DocumentCode'], 
                                                            IssuingState_value=dict_dataset['IssuingState'],
                                                            DocumentNumber_value=dict_dataset['DocumentNumber'], 

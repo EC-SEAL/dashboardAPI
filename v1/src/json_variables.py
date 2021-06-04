@@ -94,7 +94,9 @@ class Dataset():
                         }}
                     ],
                     "subjectId": "DocumentNumber",
-                    "issuerId": "IssuingState"
+                    "issuerId": "IssuingState",
+                    "type": "eMRTD",
+                    "issued": "{issued}"
                 }}'''
 
     signed_dataset = '{{"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}}'

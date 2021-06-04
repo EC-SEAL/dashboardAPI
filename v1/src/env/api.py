@@ -214,7 +214,7 @@ class Cl_ident:
                             "datasetA": datasetA,
                             "datasetB": datasetB})
 
-                elif data[identity]['data'].get('type') == 'dataSet':
+                elif data[identity]['data'].get('type') == 'eMRTD':
 
                     identities_list.append(
                         {
