@@ -84,13 +84,6 @@ class Dataset():
                             "mandatory"	    : "true",
                             "values"		: ["{PlaceOfBirth_value}"]
 
-                        }},
-                        {{
-                            "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
-                            "friendlyName"	:"FaceImage", 
-                            "encoding"		: "Binary", 
-                            "mandatory"	    : "true",
-                            "values"		: null
                         }}
                     ],
                     "subjectId": "DocumentNumber",
@@ -98,6 +91,14 @@ class Dataset():
                     "type": "eMRTD",
                     "issued": "{issued}"
                 }}'''
+
+                        # {{
+                        #     "name" : "https://www.icao.int/publications/Documents/9303_p10_cons_en.pdf#FaceImage",
+                        #     "friendlyName"	:"FaceImage", 
+                        #     "encoding"		: "Binary", 
+                        #     "mandatory"	    : "true",
+                        #     "values"		: null
+                        # }}                
 
     signed_dataset = '{{"dataSetSerialised": "{datasetSerialised_value}", "signature": "{signature_value}"}}'
 
