@@ -1177,7 +1177,7 @@ def api_vcIssue(request):
             raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
         
         #Addaptation of the response address to the specific moduleID endpoint 
-        response_address = response_address + '/' + moduleID.lower()
+        response_address = response_address + '/' + VCDefinition
 
         return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
 
