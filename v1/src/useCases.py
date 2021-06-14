@@ -1136,9 +1136,12 @@ def api_vcIssue(request):
 
         if not r_list:
             raise JsonVariables.Exceptions.ListResponseFailed
+            
+        VCDefinitions_list = [list(VCDefinition.keys())[0] for VCDefinition in r_list]
+        VCDefinitions_list.append(VC_ISSUE_MODULE_VALID_METHODS[3].lower())
 
         # Appended a new vcDefinition for eidas-edugain linked identities to the ones retrieved from the APIGW:
-        if moduleID.lower() not in [list(VCDefinition.keys())[0] for VCDefinition in r_list].append(VC_ISSUE_MODULE_VALID_METHODS[3].lower()):
+        if moduleID.lower() not in VCDefinitions_list:
             raise JsonVariables.Exceptions.NoModuleIDinVCDefinitionsList
 
         VCDefinition = moduleID.lower()
@@ -1172,6 +1175,9 @@ def api_vcIssue(request):
 
         if response_bindingMethod not in ['HTTP-POST-REDIRECT', 'HTTP-GET-REDIRECT']: #GET is added temporarly for alignemenmt with dashboard
             raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
+        
+        #Addaptation of the response address to the specific moduleID endpoint 
+        response_address = response_address + '/' + moduleID.lower()
 
         return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
 
