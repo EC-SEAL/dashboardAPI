@@ -962,7 +962,7 @@ def api_identityLink(request):
     except JsonVariables.Exceptions.ErrorInvalidLengthSessionId:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_INVALID_LENGTH_SESSIONID)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.RequestWithInvalidUUID:
@@ -993,47 +993,47 @@ def api_identityLink(request):
     except JsonVariables.Exceptions.CallbackResponseFailed:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_CALLBACK_RESPONSE_HAS_FAILED)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.IdentResponseFailed:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.IdentitiesListEmpty:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_ID_LIST_EMPTY)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.CantRetrieveRequestedIdentities:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_CANT_RETRIEVE_ID)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.ErrorTokenDoesntFitRegex:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_TOKEN_DOESNT_FIT_REGEX)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.ErrorAddressDoesntFitRegex:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_ADDRESS_DOESNT_FIT_REGEX)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
 
     except JsonVariables.Exceptions.ErrorBindingDoesntFitList:
         # Tracing details error only on the server 
         print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_BINDING_DOESNT_FIT_LIST)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=502)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
 
     except:
-        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED)
-        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=500)
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=500)
 
 
 """Manage Identity Data (All providers)"""
