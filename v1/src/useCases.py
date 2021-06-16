@@ -736,6 +736,7 @@ def api_retrieveIdData(request):
         print(API_RETRIEVE_ID_DATA_DEBUG_CODE + JsonVariables.Error.ERROR_RETRIEVE_IDENTITY_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_RETRIEVE_IDENTITY_FAILED), status=500)
         
+        
 """Derive Identifier"""
 def api_deriveIdentifier(request):
     
