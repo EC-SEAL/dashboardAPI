@@ -916,7 +916,7 @@ def api_identityLink(request):
             raise JsonVariables.Exceptions.RequestNeedsIdentityID
 
         identityIDa = request.POST['identityIDa']
-        identityIDb = request.POST['identityIDa']
+        identityIDb = request.POST['identityIDb']
 
         cl_session = sessionControl(UUID)
 
@@ -933,26 +933,31 @@ def api_identityLink(request):
         
         cl_ident = Cl_ident()
 
-        ## From here
-
         r_ident = cl_ident.mgrList(cl_session.sessionID)
 
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
-            raise JsonVariables.Exceptions.IdentRespons
-        
-        identities = cl_ident.jsonParser(r_ident)
+            raise JsonVariables.Exceptions.IdentResponseFailed
 
-        if identities.identitiesList.isEmpty():
+        #identities = cl_ident.jsonParser(r_ident)
+        identities = r_ident.json()
+
+        if not identities:
             raise JsonVariables.Exceptions.IdentitiesListEmpty
 
-        identityA = list(filter(lambda identity: unquote(identity['id']) == identityIDa, identities.identitiesList))
-        identityB = list(filter(lambda identity: unquote(identity['id']) == identityIDb, identities.identitiesList))
+        for index in range(0, len(identities)):
+            result_data = json.loads(identities[index].get('data'))
+            identities[index].update({'data': result_data})
+
+        identityA = list(filter(lambda identity: unquote(identity['id']) == identityIDa, identities))
+        identityB = list(filter(lambda identity: unquote(identity['id']) == identityIDb, identities))
 
         # assert(len(identityA) > 0 and len(identityB) > 0)
         if not identityA or not identityB:
             raise JsonVariables.Exceptions.CantRetrieveRequestedIdentities
 
         r_ident = cl_ident.linkingRequest(cl_session.sessionID, moduleID, identityA[0]['id'], identityB[0]['id'])
+
+        print(r_ident.content)
         
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
