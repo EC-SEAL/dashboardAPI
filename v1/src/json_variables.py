@@ -165,6 +165,7 @@ class Error():
     ERROR_MSTOKEN_VALIDATION_FAILED = 'The msToken validation process has failed'
     ERROR_ID_ALL_LIST_FAILED = 'The identities list retrieval process has failed'
     ERROR_ID_EMRTD_FAILED = 'The eMRTD identity load process has failed'
+    ERROR_LINK_IDENTITY_FAILED = 'The linking process has failed'
 
     ERROR_GENERATING_UUID = 'The UUID generation has failed'    
     ERROR_INVALID_LENGTH_SESSIONID = 'The sessionId length is invalid'

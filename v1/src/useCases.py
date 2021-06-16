@@ -883,6 +883,179 @@ def api_deriveIdentifier(request):
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_DERIVE_IDENTITY_FAILED), status=500)
         
 
+"""Identity Reconciliation (Link)"""
+def api_identityLink(request):
+
+    API_LINK_ID_DEBUG_CODE = "api_LNK_ID - "
+    
+    try:
+        if request.method != 'POST':
+            raise JsonVariables.Exceptions.MethodNotValid
+
+        if request.POST.get('UUID',None) == None:
+            raise JsonVariables.Exceptions.RequestNeedsUUID
+            
+        UUID = request.POST['UUID']
+
+        if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
+            raise JsonVariables.Exceptions.RequestWithInvalidUUID
+
+        if not sessionValid(UUID):
+            raise JsonVariables.Exceptions.RequestWithOutdatedUUID
+
+        if request.POST.get('moduleID',None) == None:
+            raise JsonVariables.Exceptions.RequestNeedsModuleID
+
+        moduleID = request.POST['moduleID']
+
+        if moduleID not in DERIVE_MODULE_VALID_METHODS:
+            raise JsonVariables.Exceptions.RequestWithInvalidModuleID
+
+        if request.POST.get('identityIDa',None) == None or request.POST.get('identityIDb',None) == None:
+            raise JsonVariables.Exceptions.RequestNeedsIdentityID
+
+        identityIDa = request.POST['identityIDa']
+        identityIDb = request.POST['identityIDa']
+
+        cl_session = sessionControl(UUID)
+
+        if len(cl_session.sessionID) != LENGTH_SESSIONID:
+            raise JsonVariables.Exceptions.ErrorInvalidLengthSessionId
+
+        # Logic of the identity retrieve request        
+        cl_callback = Cl_callback()
+
+        r_callback = cl_callback.callback(cl_session.sessionID, Settings.Prod.SEAL_ENDPOINT + '/tokenValidate='+UUID)
+
+        if r_callback.status_code != REQUEST_RESPONSE_200_OK:
+            raise JsonVariables.Exceptions.CallbackResponseFailed
+        
+        cl_ident = Cl_ident()
+
+        r_ident = cl_ident.mgrList(cl_session.sessionID)
+
+        if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
+            raise JsonVariables.Exceptions.IdentResponseFailed
+
+        identities = cl_ident.jsonParser(r_ident)
+
+        if identities.identitiesList.isEmpty():
+            raise JsonVariables.Exceptions.IdentitiesListEmpty
+
+        identityA = list(filter(lambda identity: unquote(identity['id']) == identityIDa, identities.identitiesList))
+        identityB = list(filter(lambda identity: unquote(identity['id']) == identityIDb, identities.identitiesList))
+
+        # assert(len(identityA) > 0 and len(identityB) > 0)
+        if not identityA or not identityB:
+            raise JsonVariables.Exceptions.CantRetrieveRequestedIdentities
+
+        r_ident = cl_ident.linkingRequest(cl_session.sessionID, moduleID, identityA[0]['id'], identityB[0]['id'])
+        
+        if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
+            raise JsonVariables.Exceptions.IdentResponseFailed
+
+        response_address = r_ident.json().get('access').get('address')
+        response_sessionToken = r_ident.json().get('payload')        
+        response_bindingMethod = r_ident.json().get('access').get('binding')
+
+        if not re.compile(JsonVariables.Regex.REGEX_ADDRESS).match(response_address):
+            raise JsonVariables.Exceptions.ErrorAddressDoesntFitRegex
+
+        if not re.compile(JsonVariables.Regex.REGEX_MSTOKEN).match(response_sessionToken):
+            raise JsonVariables.Exceptions.ErrorTokenDoesntFitRegex
+
+        if response_bindingMethod not in ['HTTP-POST-REDIRECT']:
+            raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
+
+        return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
+
+    except JsonVariables.Exceptions.MethodNotValid:
+            print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_METHOD_MUST_BE_POST)
+            return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_METHOD_MUST_BE_POST), status=405)
+
+
+    except JsonVariables.Exceptions.RequestNeedsUUID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_UUID), status=400)
+
+
+    except JsonVariables.Exceptions.ErrorInvalidLengthSessionId:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_INVALID_LENGTH_SESSIONID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.RequestWithInvalidUUID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_UUID), status=400)
+
+
+    except JsonVariables.Exceptions.RequestWithOutdatedUUID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_OUTDATED_UUID), status=401)
+
+
+    except JsonVariables.Exceptions.RequestNeedsModuleID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_MODULEID), status=400)
+
+
+    except JsonVariables.Exceptions.RequestWithInvalidModuleID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITH_INVALID_MODULEID), status=400)
+
+
+    except JsonVariables.Exceptions.RequestNeedsIdentityID:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_REQUEST_WITHOUT_IDENTITY_ID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_REQUEST_WITHOUT_IDENTITY_ID), status=400)
+
+
+    except JsonVariables.Exceptions.CallbackResponseFailed:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_CALLBACK_RESPONSE_HAS_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.IdentResponseFailed:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_IDENT_RESPONSE_HAS_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.IdentitiesListEmpty:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_ID_LIST_EMPTY)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.CantRetrieveRequestedIdentities:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_CANT_RETRIEVE_ID)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.ErrorTokenDoesntFitRegex:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_TOKEN_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.ErrorAddressDoesntFitRegex:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_ADDRESS_DOESNT_FIT_REGEX)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+
+    except JsonVariables.Exceptions.ErrorBindingDoesntFitList:
+        # Tracing details error only on the server 
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_BINDING_DOESNT_FIT_LIST)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=502)
+
+    except:
+        print(API_LINK_ID_DEBUG_CODE + JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED)
+        return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_LINK_IDENTITY_FAILED), status=500)
+
+
 """Manage Identity Data (All providers)"""
 def api_identityAllList(request):
     API_ID_ALL_LIST_DEBUG_CODE = "api_ID_ALL_LIST - "
