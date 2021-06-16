@@ -34,6 +34,8 @@ VC_ISSUE_SSI_ID_VALID_METHODS = 'uPort'
 
 EMRTD_VALID_METHODS = ['eMRTD']
 
+LINK_MODULE_VALID_METHODS = ['autoSEAL', 'manualXYZ']
+
 
 """API TEST (Get)"""
 def api_test(request):
@@ -907,7 +909,7 @@ def api_identityLink(request):
 
         moduleID = request.POST['moduleID']
 
-        if moduleID not in DERIVE_MODULE_VALID_METHODS:
+        if moduleID not in LINK_MODULE_VALID_METHODS:
             raise JsonVariables.Exceptions.RequestWithInvalidModuleID
 
         if request.POST.get('identityIDa',None) == None or request.POST.get('identityIDb',None) == None:
@@ -931,11 +933,13 @@ def api_identityLink(request):
         
         cl_ident = Cl_ident()
 
+        ## From here
+
         r_ident = cl_ident.mgrList(cl_session.sessionID)
 
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
-            raise JsonVariables.Exceptions.IdentResponseFailed
-
+            raise JsonVariables.Exceptions.IdentRespons
+        
         identities = cl_ident.jsonParser(r_ident)
 
         if identities.identitiesList.isEmpty():
