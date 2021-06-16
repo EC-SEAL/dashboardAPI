@@ -200,10 +200,14 @@ def api_datastoreLoad(request, moduleID):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -332,10 +336,14 @@ def api_datastoreStore(request, moduleID):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -462,10 +470,14 @@ def api_ssiLink(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -596,10 +608,14 @@ def api_retrieveIdData(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -720,7 +736,7 @@ def api_retrieveIdData(request):
         print(API_RETRIEVE_ID_DATA_DEBUG_CODE + JsonVariables.Error.ERROR_RETRIEVE_IDENTITY_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_RETRIEVE_IDENTITY_FAILED), status=500)
         
-
+        
 """Derive Identifier"""
 def api_deriveIdentifier(request):
     
@@ -731,10 +747,14 @@ def api_deriveIdentifier(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -1044,10 +1064,14 @@ def api_identityAllList(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -1116,7 +1140,6 @@ def api_identityAllList(request):
     except:
         print(API_ID_ALL_LIST_DEBUG_CODE + JsonVariables.Error.ERROR_ID_ALL_LIST_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_ID_ALL_LIST_FAILED), status=500)
-
 
 """ EMRTD """
 def api_eMRTD(request, moduleID):
@@ -1271,10 +1294,14 @@ def api_vcIssue(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -1311,7 +1338,7 @@ def api_vcIssue(request):
 
         if not r_list:
             raise JsonVariables.Exceptions.ListResponseFailed
-            
+        
         VCDefinitions_list = [list(VCDefinition.keys())[0] for VCDefinition in r_list]
         VCDefinitions_list.append(VC_ISSUE_MODULE_VALID_METHODS[3].lower())
 
@@ -1350,7 +1377,7 @@ def api_vcIssue(request):
 
         if response_bindingMethod not in ['HTTP-POST-REDIRECT', 'HTTP-GET-REDIRECT']: #GET is added temporarly for alignemenmt with dashboard
             raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
-        
+
         #Addaptation of the response address to the specific moduleID endpoint 
         response_address = response_address + '/' + VCDefinition
 

@@ -7,7 +7,7 @@ from .src import controlFunctions
 urlpatterns = [
 
     # Test path
-    path('test', csrf_exempt(useCases.api_test)),   # GET
+    path('test', csrf_exempt(useCases.api_test)),  # GET
 
     # Index resources
     path('', csrf_exempt(useCases.api_help)), #GET #OpenAPI Object
