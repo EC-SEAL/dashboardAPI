@@ -180,6 +180,11 @@ class Error():
 
     ERROR_REQUEST_WITHOUT_MSTOKEN = 'The request needs to be sent together with an msToken'
 
+    ERROR_REQUEST_WITHOUT_IDENTITY_ID = 'The request needs to be sent together with the identities IDs'
+
+    ERROR_ID_LIST_EMPTY = 'The request had produced an empty identities dictionary'
+    ERROR_CANT_RETRIEVE_ID = 'The request identities could not be retrieved'
+
     ERROR_CALLBACK_RESPONSE_HAS_FAILED = 'The callback response has failed'
     ERROR_AUTH_RESPONSE_HAS_FAILED = 'The authentication response has failed'
     ERROR_IDENT_RESPONSE_HAS_FAILED = 'The identification response has failed'
@@ -300,4 +305,16 @@ class Exceptions():
 
     class TokenResponseFailed(Exception):
         # Class exception for handling msToken request with failed response
+        pass
+
+    class RequestNeedsIdentityID(Exception):
+        # Class exception for handling requests without mandatory identity ID(s)
+        pass
+
+    class IdentitiesListEmpty(Exception):
+        # Class exception for handling requests that produces empty identities dictionary
+        pass
+
+    class CantRetrieveRequestedIdentities(Exception):
+        # Class exception for handling request that produces not retrievable identities dictionary
         pass
