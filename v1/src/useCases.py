@@ -200,10 +200,14 @@ def api_datastoreLoad(request, moduleID):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -332,10 +336,14 @@ def api_datastoreStore(request, moduleID):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -462,10 +470,14 @@ def api_ssiLink(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -596,10 +608,14 @@ def api_retrieveIdData(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -730,10 +746,14 @@ def api_deriveIdentifier(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -870,10 +890,14 @@ def api_identityAllList(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -1096,10 +1120,14 @@ def api_vcIssue(request):
         if request.method != 'POST':
             raise JsonVariables.Exceptions.MethodNotValid
 
-        if request.POST.get('UUID',None) == None:
+        if request.get_signed_cookie('UUID', None):
+            UUID = request.get_signed_cookie('UUID')
+
+        elif request.POST.get('UUID',None):
+            UUID = request.POST['UUID']
+        
+        else:
             raise JsonVariables.Exceptions.RequestNeedsUUID
-            
-        UUID = request.POST['UUID']
 
         if len(UUID) != LENGTH_UUID or not sessionExists(UUID):
             raise JsonVariables.Exceptions.RequestWithInvalidUUID
@@ -1136,9 +1164,12 @@ def api_vcIssue(request):
 
         if not r_list:
             raise JsonVariables.Exceptions.ListResponseFailed
+        
+        VCDefinitions_list = [list(VCDefinition.keys())[0] for VCDefinition in r_list]
+        VCDefinitions_list.append(VC_ISSUE_MODULE_VALID_METHODS[3].lower())
 
         # Appended a new vcDefinition for eidas-edugain linked identities to the ones retrieved from the APIGW:
-        if moduleID.lower() not in [list(VCDefinition.keys())[0] for VCDefinition in r_list].append(VC_ISSUE_MODULE_VALID_METHODS[3].lower()):
+        if moduleID.lower() not in VCDefinitions_list:
             raise JsonVariables.Exceptions.NoModuleIDinVCDefinitionsList
 
         VCDefinition = moduleID.lower()
@@ -1172,6 +1203,9 @@ def api_vcIssue(request):
 
         if response_bindingMethod not in ['HTTP-POST-REDIRECT', 'HTTP-GET-REDIRECT']: #GET is added temporarly for alignemenmt with dashboard
             raise JsonVariables.Exceptions.ErrorBindingDoesntFitList
+
+        #Addaptation of the response address to the specific moduleID endpoint 
+        response_address = response_address + '/' + VCDefinition
 
         return JsonResponse(JsonConstructor(_address=response_address, _msToken=response_sessionToken, _bindingMethod=response_bindingMethod), status=200)
 
