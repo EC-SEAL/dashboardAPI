@@ -956,8 +956,6 @@ def api_identityLink(request):
             raise JsonVariables.Exceptions.CantRetrieveRequestedIdentities
 
         r_ident = cl_ident.linkingRequest(cl_session.sessionID, moduleID, identityA[0]['id'], identityB[0]['id'])
-
-        print(r_ident.content)
         
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
@@ -1091,8 +1089,7 @@ def api_identityAllList(request):
 
         if len(cl_session.sessionID) != LENGTH_SESSIONID:
             raise JsonVariables.Exceptions.ErrorInvalidLengthSessionId
-              
-
+        
         cl_ident = Cl_ident()
 
         r_ident = cl_ident.mgrList(cl_session.sessionID)
@@ -1100,13 +1097,7 @@ def api_identityAllList(request):
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
 
-        print('***** api_identityAllList antes jsonParser')
-        print('***** r_ident: ')
-        print(r_ident.content)
-
         identities = cl_ident.jsonParser(r_ident)
-
-        print('***** api_identityAllList despues jsonParser')
 
         json_identities = json.dumps(identities)
 
