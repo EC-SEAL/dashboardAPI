@@ -1470,3 +1470,100 @@ def api_vcIssue(request):
     except:
         print(API_VC_ISSUE_DEBUG_CODE + JsonVariables.Error.ERROR_VC_ISSUE_FAILED)
         return JsonResponse(JsonConstructor(_ERROR=JsonVariables.Error.ERROR_VC_ISSUE_FAILED), status=500)
+
+"""
+    UC0.01
+
+    CUSTOM USERCASE associated to cl/ident/mgr/list:
+
+    It retrieves the storeEntry Set for the identiies loaded in the session (at the SM) without the linked ones.
+
+"""
+def uc0_01(request):
+
+    def managerList(_UUID):
+        error_text = 'An error has been occured with the API Calls. Please, contact the System Administrador (Error_code: _ML01)'
+
+        try:
+            assert(sessionExists(_UUID))
+            assert(sessionValid(_UUID))
+        except:
+            if (Settings.DEBUG): print('DEBUG-uc0_01-ML-001: Error assert session exists or valid')
+            return error_text, 401
+
+
+        cl_ident = Cl_ident()
+        user_session = getSessionId(_UUID)
+        
+        identities = cl_ident.jsonParser(cl_ident.mgrList(user_session.sessionID))
+
+        #dict( {"uniqueProviders": list(set(providers_list)), "identitiesList": identities_list} )
+
+        if('linkedID' in identities['uniqueProviders']):
+            if (Settings.DEBUG): print('There are linked identities in the dict.') #TO-DO: Delete.
+
+            #Remove Provider == 'linkedID'
+            identities['uniqueProviders'].remove('linkedID')
+            #Remove dictionaries that contents the ('provider': 'linkedID') Key-Value inside.
+            identities['identitiesList'] = [identity for identity in identities['identitiesList'] if not (identity['provider'] == 'linkedID')]
+
+        if('derivedID' in identities['uniqueProviders']):
+            if (Settings.DEBUG): print('There are derived identities in the dict.') #TO-DO: Delete.
+
+            #Remove Provider == 'derivedID'
+            identities['uniqueProviders'].remove('derivedID')
+            #Remove dictionaries that contents the ('provider': 'derivedID') Key-Value inside.
+            identities['identitiesList'] = [identity for identity in identities['identitiesList'] if not (identity['provider'] == 'derivedID')]
+
+
+        return '{}'.format(json.dumps(identities)), 200
+
+    try:
+        parametro_http_UUID = request.GET['data']
+    except:
+        return HttpResponse('Data not found in the request', status=404)
+
+    if (len(parametro_http_UUID) == 32):
+        response_text, status_code = managerList(parametro_http_UUID)
+        return HttpResponse(response_text, status=status_code)
+    else:
+        if (Settings.DEBUG): print('DEBUG-uc0_01-ML-002: Error invalid UUID = {}'.format(parametro_http_UUID))
+        return HttpResponse('Invalid data', status=404)
+
+
+"""
+    UC0.02
+
+    CUSTOM USERCASE associated to cl/ident/mgr/list:
+
+    It retrieves the storeEntry Set for all identiies loaded in the session (at the SM).
+
+"""
+def uc0_02(UUID):
+
+    def managerList(_UUID):
+        error_text = 'An error has been occured with the API Calls. Please, contact the System Administrador (Error_code: _ML02)'
+
+        try:
+            assert(sessionExists(_UUID))
+            assert(sessionValid(_UUID))
+        except:
+            if (Settings.DEBUG): print('DEBUG-uc0_02-ML-001: Error assert session exists or valid')
+            return None
+
+
+        cl_ident = Cl_ident()
+        user_session = getSessionId(_UUID)
+        
+        identities = cl_ident.jsonParser(cl_ident.mgrList(user_session.sessionID))
+
+        return identities
+
+    try:
+        assert(len(UUID) == 32)
+
+        return managerList(UUID)
+
+    except:
+        if (Settings.DEBUG): print('DEBUG-uc0_02-ML-002: Error invalid UUID = {}'.format(UUID))
+        return None
