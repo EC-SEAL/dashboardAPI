@@ -141,7 +141,7 @@ class Regex():
 
     REGEX_MSTOKEN = r'^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
 
-    REGEX_ADDRESS = r'^((http|https):\/\/)(([a-zA-Z0-9-]{2,256}.)?([a-zA-Z0-9-]{2,256}.[a-z]{2,6}))(:[0-9]{2,5})?([a-zA-Z-\/]{2,256})?$'
+    REGEX_ADDRESS = r'^((http|https):\/\/)(([a-zA-Z0-9-]{2,256}.)?([a-zA-Z0-9-]{2,256}.[a-z]{2,6}))(:[0-9]{2,5})?([a-zA-Z-\/{}]{2,256})?$'
 
 
 # JsonConstructor ERROR VARIABLES:
@@ -181,10 +181,10 @@ class Error():
 
     ERROR_REQUEST_WITHOUT_MSTOKEN = 'The request needs to be sent together with an msToken'
 
-    ERROR_REQUEST_WITHOUT_IDENTITY_ID = 'The request needs to be sent together with the identities IDs'
+    ERROR_REQUEST_WITHOUT_IDENTITY_ID = 'The request needs to be sent together with the identity/ies ID(s)'
 
     ERROR_ID_LIST_EMPTY = 'The request had produced an empty identities dictionary'
-    ERROR_CANT_RETRIEVE_ID = 'The request identities could not be retrieved'
+    ERROR_CANT_RETRIEVE_ID = 'The requested identity/ies could not be retrieved'
 
     ERROR_CALLBACK_RESPONSE_HAS_FAILED = 'The callback response has failed'
     ERROR_AUTH_RESPONSE_HAS_FAILED = 'The authentication response has failed'

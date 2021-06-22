@@ -371,6 +371,30 @@ class Cl_ident:
 
         return r
 
+    def linkingRequestResult(self, _sessionId, _moduleId, _requestId):
+
+        if (Settings.DEBUG):
+            print('Cl_ident linkingRequestResult INI')
+
+        s = requests.Session()
+
+        headers = {'Accept': 'application/json'}
+
+        try:
+            r = s.get(
+                Settings.Prod.API_GET_cl_ident_linking_module_request_result.format(
+                    moduleId=_moduleId,
+                    requestId=_requestId,
+                    sessionId=_sessionId),
+                headers=headers,
+                proxies=Settings.Prod.SEAL_PROXY)
+        except BaseException:
+            if (Settings.DEBUG):
+                print('Cl_ident linkingRequestResult exception')
+            r = requests.Response()
+
+        return r
+
     def derivationGenerate(self, _sessionId, _moduleId):
 
         if (Settings.DEBUG):
