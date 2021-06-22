@@ -1140,6 +1140,9 @@ def api_identityLinkResult(request):
         if not r_ident.status_code == REQUEST_RESPONSE_200_OK:
             raise JsonVariables.Exceptions.IdentResponseFailed
 
+        if not r_ident.json().get('payload', None):
+            raise JsonVariables.Exceptions.IdentResponseFailed
+
         response_address = r_ident.json().get('access').get('address')
         response_sessionToken = r_ident.json().get('payload')        
         response_bindingMethod = r_ident.json().get('access').get('binding')
