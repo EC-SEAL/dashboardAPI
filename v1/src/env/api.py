@@ -150,8 +150,6 @@ class Cl_ident:
                 result_data = json.loads(data[index].get('data'))
                 data[index].update({'data': result_data})
 
-            #print(data)
-
             dataset_identities = list(filter(lambda identity: identity['type'] == 'dataSet', data))
 
             linkingRequest_identities = list(filter(lambda identity: identity['type'] == 'linkRequest' and identity['data'].get('lloa', None) == None, data))
@@ -161,7 +159,6 @@ class Cl_ident:
             identities_list = list()
 
             for identity in dataset_identities:
-                print(identity)
 
                 identity_type = identity['data'].get('type')
 
@@ -371,8 +368,6 @@ class Cl_ident:
             providers_list = list(identity.get('provider')
                                   for identity in identities_list)
             #['eIDAS', 'eduGAIN', 'eduGAIN', 'eduGAIN']
-
-            print(providers_list)
 
             # Adaptation until linked idenitites come with a valid provider:
             # providers_list = [
