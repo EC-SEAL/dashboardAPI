@@ -166,6 +166,7 @@ class Error():
     ERROR_ID_ALL_LIST_FAILED = 'The identities list retrieval process has failed'
     ERROR_ID_EMRTD_FAILED = 'The eMRTD identity load process has failed'
     ERROR_LINK_IDENTITY_FAILED = 'The linking process has failed'
+    ERROR_LINK_RESULT_FAILED = 'The link result process has failed'
 
     ERROR_GENERATING_UUID = 'The UUID generation has failed'    
     ERROR_INVALID_LENGTH_SESSIONID = 'The sessionId length is invalid'
@@ -182,6 +183,8 @@ class Error():
     ERROR_REQUEST_WITHOUT_MSTOKEN = 'The request needs to be sent together with an msToken'
 
     ERROR_REQUEST_WITHOUT_IDENTITY_ID = 'The request needs to be sent together with the identity/ies ID(s)'
+
+    ERROR_LINK_REQUEST_NOT_FOUND = 'The received link request could not been found'
 
     ERROR_ID_LIST_EMPTY = 'The request had produced an empty identities dictionary'
     ERROR_CANT_RETRIEVE_ID = 'The requested identity/ies could not be retrieved'
@@ -318,4 +321,8 @@ class Exceptions():
 
     class CantRetrieveRequestedIdentities(Exception):
         # Class exception for handling request that produces not retrievable identities dictionary
+        pass
+
+    class LinkRequestNotFound(Exception):
+        # Class exception for handling request that produces not retrievable link request results
         pass
