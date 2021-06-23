@@ -1398,11 +1398,11 @@ def api_eMRTD(request, moduleID):
 
         r_isload = generic_api.post(headers,response_address,payload)
 
-        print('***** r_isload: ')
-        print(r_isload)
+        # print('***** r_isload: ')
+        # print(r_isload)
 
-        print('***** r_isload.content: ')
-        print(r_isload.content)
+        # print('***** r_isload.content: ')
+        # print(r_isload.content)
 
         # TO-DO: Create a new error
         if r_isload.status_code != REQUEST_RESPONSE_200_OK:
