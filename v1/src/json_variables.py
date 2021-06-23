@@ -141,7 +141,8 @@ class Regex():
 
     REGEX_MSTOKEN = r'^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
 
-    REGEX_ADDRESS = r'^((http|https):\/\/)(([a-zA-Z0-9-]{2,256}.)?([a-zA-Z0-9-]{2,256}.[a-z]{2,6}))(:[0-9]{2,5})?([a-zA-Z-\/{}]{2,256})?$'
+    #REGEX_ADDRESS = r'^((http|https):\/\/)(([a-zA-Z0-9-]{2,256}.)?([a-zA-Z0-9-]{2,256}.[a-z]{2,6}))(:[0-9]{2,5})?([a-zA-Z-\/{}]{2,256})?$'
+    REGEX_ADDRESS = r'^((http|https):\/\/)(([a-zA-Z0-9-]{2,256}.)?([a-zA-Z0-9-]{2,256}.[a-z]{2,6}?(.[a-z]{2,6})))(:[0-9]{2,5})?([a-zA-Z-\/{}]{2,256})?$'
 
 
 # JsonConstructor ERROR VARIABLES:
