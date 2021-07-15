@@ -31,6 +31,8 @@ urlpatterns = [
     path('identity/retrieve', csrf_exempt(useCases.api_retrieveIdData)), # POST
     path('identity/derive', csrf_exempt(useCases.api_deriveIdentifier)), #POST
     path('identity/link', csrf_exempt(useCases.api_identityLink)), #POST
+    path('identity/link/result', csrf_exempt(useCases.api_identityLinkResult)), #POST
+    
     path('identity/all/list', csrf_exempt(useCases.api_identityAllList)), #POST
 
     path('identity/<str:moduleID>/load', csrf_exempt(useCases.api_eMRTD)), # POST

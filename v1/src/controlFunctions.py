@@ -171,8 +171,8 @@ def DatasetSerialisedConstructor(_id, _dataset):
     
     dict_dataset = json.loads(_dataset)
 
-    print('***** dict_dataset:')
-    print(dict_dataset)
+    # print('***** dict_dataset:')
+    # print(dict_dataset)
 
     datasetTemplate = JsonVariables.Dataset.dataset.format(id=_id,
                                                            issued=datetime.datetime.now().isoformat(),
@@ -187,8 +187,8 @@ def DatasetSerialisedConstructor(_id, _dataset):
                                                            Sex_value=dict_dataset['Sex'],
                                                            PlaceOfBirth_value=dict_dataset['PlaceOfBirth'])
     
-    print('***** datasetTemplate:')
-    print(datasetTemplate)
+    # print('***** datasetTemplate:')
+    # print(datasetTemplate)
 
     datasetTemplate_b64 = base64.b64encode(datasetTemplate.encode('utf-8'))
 
